@@ -38,8 +38,8 @@ public:
             msgRecvList.push_back(i);
 
             // 代替 unlock() 的一种方式
-            // adopt_lock 表示如果 mutax 已经被 lock，就不再次 lock 了，只等 guard 析构时 unlock
-            // adopt_lock 是一个结构体对象，起一个标记作用
+            // adopt_lock 表示 mutax 已经被 lock，不再次 lock 了，只等 guard 析构时 unlock
+            // adopt_lock 是一个结构体对象，起一个标记作用。注意，必须是 mutax 已经被 lock 了，如果还没被 lock，那使用 adopt_lock 会报错
             // lock_guard<mutex> guardA(lockA, adopt_lock);
             // lock_guard<mutex> guardB(lockB, adopt_lock);
 
