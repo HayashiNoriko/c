@@ -29,7 +29,7 @@ int main() {
     future<int> result = async(launch::async, compute);
     /**
      * async() 的第一个参数：
-     * std::launch::deferred    表示线程入口函数调用被延迟到 future 的 wait()或者 get()函数调用时才执行，且是在主线程执行的
+     * std::launch::deferred    表示线程入口函数调用被延迟到 future 的 wait()或者 get()函数调用时才执行；且是在主线程执行的，纯纯函数调用，非多线程
      *                          若此情况下未调用 wait()或 get()，那么子线程不会执行，甚至不会创建！（maybe 是被编译器优化了）
      *
      * std::launch::async       默认。立即创建并执行子线程
