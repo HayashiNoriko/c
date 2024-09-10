@@ -42,6 +42,7 @@ int main() {
     // 获取异步任务的结果，阻塞直到结果计算完成
     int value = result.get();
     // value = result.get(); // 错误，get() 函数只能调用一次。也可以用 wait()，但是只会等，不能拿到值
+    /** get() 函数是一个移动语义，一旦调用，result 中就空了。*/
 
     /**
      * 一个神奇的现象：如果既不调用 get，又不调用 wait，主线程也会在 return 之前，等子线程运行完毕。
