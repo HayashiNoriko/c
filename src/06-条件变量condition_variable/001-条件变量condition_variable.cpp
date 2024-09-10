@@ -65,7 +65,7 @@ public:
             });
 
             // 消费中...
-            std::this_thread::sleep_for(std::chrono::milliseconds(150)); // 模拟消费过程
+            this_thread::sleep_for(chrono::milliseconds(150)); // 模拟消费过程
             int command = msgRecvList.front();
             msgRecvList.pop_front(); // 移除
             cout << "outMsgRecvList()执行，取出" << command << endl;

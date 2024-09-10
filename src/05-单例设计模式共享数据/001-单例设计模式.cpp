@@ -27,7 +27,7 @@ public:
     public:
         ~CG() {
             if (mInstance) {
-                cout<<mInstance<<"被delete了"<<endl;
+                cout << mInstance << "被delete了" << endl;
                 delete mInstance;
                 mInstance = nullptr;
             }

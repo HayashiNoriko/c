@@ -29,7 +29,7 @@ public:
         // 若不加外层 if，则除了第一次 new 时要锁，以后每次获取对象时也要锁上一会儿
         if (mInstance == nullptr) {
 
-            unique_lock<mutex> myUnique(myMutex); // 自动加锁。防止被不同线程多次 new
+            unique_lock<mutex> myUnique(myMutex); // 防止被不同线程多次 new
 
             if (mInstance == nullptr) {
 
