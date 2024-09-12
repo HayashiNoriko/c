@@ -32,7 +32,11 @@ int main() {
      * std::launch::deferred    表示线程入口函数调用被延迟到 future 的 wait()或者 get()函数调用时才执行；且是在主线程执行的，纯纯函数调用，非多线程
      *                          若此情况下未调用 wait()或 get()，那么子线程不会执行，甚至不会创建！（maybe 是被编译器优化了）
      *
-     * std::launch::async       默认。立即创建并执行子线程
+     * std::launch::async       立即创建并执行子线程
+     *
+     * 注意，还可以使用 launch::deferred | launch::async，这可能延迟，可能立即执行，说不定，系统自行选择，有空闲资源就创建新线程，没有就延迟调用。
+     * 若不填参数，则默认是两个都写。
+     * 可以用 08-001 的 wait_for() 函数来判断是 async 的还是 deferred 的。可以传入 0 秒（直接填0s）
      * */
 
     // 可以在这里做其他的事情
