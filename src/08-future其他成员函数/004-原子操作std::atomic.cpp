@@ -21,10 +21,18 @@ atomic<int> g_mycount = 0; // 定义一个原子全局量
 
 void myWrite() {
     for (int i = 0; i < 1000000; ++i) {
-        // g_mycount++; // 是原子操作
-        g_mycount.fetch_add(1); // 是原子操作
-
+        // 自增
+        g_mycount++; // 是原子操作
+        // g_mycount.fetch_add(1); // 是原子操作
         // g_mycount = g_mycount + 1; // 不是原子操作，运行结果不对。它由多个非原子步骤组成，在多线程环境中存在数据竞争
+
+        // 赋值
+        // atomic<int> g_mycount2 = g_mycount; // 错误，不能使用拷贝赋值运算符，这不是原子操作了
+        // atomic<int> g_mycount2(g_mycount); // 错误，不能使用拷贝构造
+        // atomic<int> g_mycount2 = g_mycount.load(); // 正确，可以使用 load 执行一个原子操作，提取值
+        atomic<int> g_mycount2(g_mycount.load()); // 正确，可以使用 load 执行一个原子操作，提取值
+        g_mycount2.store(12); // 正确，使用 store 来赋值，是原子操作
+        g_mycount2 = 13; // 正确，是原子操作
     }
 }
 
