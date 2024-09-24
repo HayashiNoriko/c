@@ -11,6 +11,7 @@ using namespace std;
 
 /**
  * 使用 call_once 保证只调用一次（即使用多个线程）
+ * 与 mutex 一样，once_flag 实例不能被拷贝或移动
  * */
 
 // 一个系统定义的标记

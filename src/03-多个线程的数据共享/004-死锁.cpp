@@ -20,7 +20,7 @@ using namespace std;
  *      一次锁住两个以上的互斥量
  *      要么把多个互斥量都锁上，要么都不锁（就在那一直等着）
  *
- * 3、lock_guard的拓展：std::adopt_lock
+ * 3、lock_guard的拓展：std::adopt_lock、scoped_lock
  * */
 
 class A {
@@ -33,7 +33,13 @@ public:
             lockA.lock();
             lockB.lock();
 
+
             // lock(lockA,lockB); // 一次性锁两个锁，若失败则把两个都释放，然后在原地等待。预防死锁
+            /**
+             * scoped_lock是 C++17 的新特性
+             * 结合了lock_guard的 RAII 特性和 lock 的一次性锁多个锁的功能，并且支持类模板参数的自动推导
+             * 然而它却不支持传入std::adopt_lock参数，所以也不能完全代替lock_guard*/
+            // scoped_lock guard(lockA, lockB);
 
             msgRecvList.push_back(i);
 
