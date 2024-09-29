@@ -19,13 +19,18 @@ public:
         int count=0;
         while(1){
             unique_lock<mutex> myUnique(myMutex);
+            /**
+             * 注意，这里使用 unique_lock，而不使用 lock_guard
+             * 在条件变量的使用场景中，线程可能需要在等待期间反复检查条件（例如，使用循环），因此需要多次解锁和锁定。
+             * lock_guard不支持这种功能，因为它在作用域结束时自动解锁，无法手动控制锁的状态。
+             * */
 
             myCond.wait(myUnique,[this](){
                 return msgRecvList.size()<5000; // 等待消息列表中有空位
             });
 
             // 生产中...
-            std::this_thread::sleep_for(std::chrono::milliseconds(100)); // 模拟生产过程
+            this_thread::sleep_for(chrono::milliseconds(100)); // 模拟生产过程
             cout << "inMsgRecvList()执行，插入元素" << count << endl;
             msgRecvList.push_back(count);
             count++;
@@ -51,8 +56,8 @@ public:
                  1. 解锁：wait 函数首先会自动解锁当前线程持有的互斥锁，然后将线程置于阻塞状态，等待其他线程发出通知。
                  2. 等待条件：当线程被唤醒时，wait 函数会重新锁定互斥锁（如果不能马上锁定，则一直尝试锁定，直到成功上锁）
                             然后并检查给定的条件是否为真。
-                            如果条件为真，线程继续执行；如果条件为假，线程重新进入等待状态，且解锁。
-                 3. 解锁并继续：条件满足后，线程解除阻塞并继续执行。
+                            如果条件为真，线程继续执行；如果条件为假，线程重新进入等待状态（回到第 1 步：解锁）。
+                 3. 解锁并继续：条件满足后，线程解除阻塞并继续执行。【是锁定状态哦，需要之后手动或自动解锁】
 
                  wait() 不填写第二个参数会有什么问题：
                  1. 虚假唤醒：线程可能在 notify_one 调用之前被虚假唤醒（由于系统层面的原因）。
